@@ -2,4 +2,4 @@
 Проект для Hexlet (Frontend Project 11).
 
 ### Деплой:
-[Тут будет ссылка, когда Vercel прочухается]
+frontend-project-11-nine-ruby.vercel.app
