@@ -4,45 +4,45 @@ import init from './init.js';
 import watch from './view.js';
 
 init().then((i18n) => {
-  // 1. Состояние (Model)
+  // 1. Состояние приложения
   const state = proxy({
     form: {
       valid: true,
       error: null,
     },
-    feeds: [], // Сюда будем сохранять добавленные ссылки для проверки на дубли
+    feeds: [], // Список уже добавленных URL
   });
 
-  // 2. Элементы DOM
+  // 2. Ссылки на элементы HTML
   const elements = {
     form: document.querySelector('.rss-form'),
     input: document.getElementById('url-input'),
     feedback: document.querySelector('.feedback'),
   };
 
-  // 3. Запускаем "слежку" за состоянием (View)
+  // 3. Запуск наблюдателя за состоянием
   watch(state, elements, i18n);
 
-  // 4. Логика (Controller)
+  // 4. Обработчик отправки формы
   elements.form.addEventListener('submit', (e) => {
     e.preventDefault();
     const formData = new FormData(e.target);
     const url = formData.get('url').trim();
 
-    // Описываем схему валидации
+    // Правила валидации
     const schema = yup.string().url().required().notOneOf(state.feeds);
 
     schema.validate(url)
       .then(() => {
-        state.form.valid = true;
+        // Если всё ок
         state.form.error = null;
-        state.feeds.push(url); // Запоминаем ссылку, чтобы не было дублей
-        e.target.reset();      // Очищаем форму
-        elements.input.focus(); // Возвращаем фокус
+        state.form.valid = true;
+        state.feeds.push(url);
       })
       .catch((err) => {
+        // Если ошибка валидации
         state.form.valid = false;
-        state.form.error = err.message; // Сюда прилетит ключ ошибки из yup.setLocale
+        state.form.error = err.message;
       });
   });
 });
