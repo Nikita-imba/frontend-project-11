@@ -14,11 +14,12 @@ export default () => {
             required: 'Не должно быть пустым',
             exists: 'RSS уже существует',
           },
+          rssSuccess: 'RSS успешно загружен',
         },
       },
     },
   }).then(() => {
-    // Настраиваем yup глобально, чтобы он выдавал наши ошибки
+    // Настраиваем yup глобально
     yup.setLocale({
       string: {
         url: 'errors.invalidUrl',
